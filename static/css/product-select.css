@@ -1,0 +1,33 @@
+.top-delete {
+    z-index: 999;
+    position: absolute;
+    top: 2px;
+    right: 18px;
+    height: 25px;
+    width: 25px;
+    padding: 4px;
+
+    color: black;
+
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 100%;
+
+    font-size: 17px;
+    text-align: center;
+
+}
+
+.top-delete:hover {
+    background-color: black;
+    color: white;
+}
+
+.tab-pane .card {
+    border: 1px solid #fd694f;
+}
+
+.tab-content {
+    padding-left: 0;
+    padding-right: 0;
+}

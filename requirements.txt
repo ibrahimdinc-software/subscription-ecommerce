@@ -1,0 +1,12 @@
+python-dateutil
+django-phonenumber-field
+phonenumbers
+django-cleanup
+django-widget-tweaks
+pillow
+requests
+django-admin-rangefilter
+django-crispy-forms
+djangorestframework
+django-db-logger
+pinax-messages

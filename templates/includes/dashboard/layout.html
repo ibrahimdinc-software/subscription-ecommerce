@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-W7RNMSB');
+    </script>
+    <!-- End Google Tag Manager -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151438298-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-151438298-1');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+        name='viewport' />
+    <title>Meow Meow | Kontrol Paneli</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard/paper-dashboard.css' %}?v=2.0.0">
+    <link rel="stylesheet" href="{% static 'css/dashboard/dash-custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/toast.css' %}">
+    {% block header %}
+
+    {% endblock header %}
+
+</head>
+
+<body>
+    <div class="wrapper">
+        {% include "includes/dashboard/sidebar.html" %}
+        <div class="main-panel">
+            {% include "includes/dashboard/navbar.html" %}
+            {% include "includes/toast.html" %}
+            <div class="content">
+                <div class="modal fade" tabindex="-1" role="dialog" id="test_modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header align-items-center">
+                                <h4 class="modal-title" id="modal-title">Modal Başlığı</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i
+                                        class="fas fa-times"></i></button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="modal-message"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                                <a class="btn btn-danger" id="modal-action">Onayla</a>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                <!-- /.modal -->
+                <div class="row justify-content-center">
+                    {% for notif in notifs %}
+                    {% include "includes/dashboard/notification.html" %}
+                    {% endfor %}
+                </div>
+                {% block body %} {% endblock body %}
+            </div>
+        </div>
+    </div>
+    {% block outbody %}
+
+    {% endblock outbody %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/dashboard/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
+
+    <script src="{% static 'js/dashboard/perfect-scrollbar.jquery.min.js' %}"></script>
+    <script src="{% static 'js/dashboard/chartjs.min.js' %}"></script>
+    <script src="{% static 'js/dashboard/bootstrap-notify.js' %}"></script>
+    <script src="{% static 'js/dashboard/paper-dashboard.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+    <script>
+        function closeAlert() {
+            var element = document.getElementsByClassName("alert");
+            element[0].remove();
+        }
+        $(document).ready(function () {
+            $('.toast').toast('show');
+            var li = $(document).find("ul.nav li");
+            for (let i = 0; i < li.length; i++) {
+                if (li[i].children[0].getAttribute("href") == window.location.pathname) {
+                    li[i].classList.add("active");
+                    $(document).find(".navbar-brand").text(li[i].children[0].textContent);
+                }
+            }
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+    {% block script %} {% endblock script %}
+</body>
+
+</html>

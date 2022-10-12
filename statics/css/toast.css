@@ -1,0 +1,18 @@
+.toast-box {
+    position: fixed;
+    top: 10%;
+    right: 2%;
+}
+.alert-area {
+    position: sticky;
+    top: 70px;
+    z-index: 1000;
+}
+
+
+
+@media screen and (max-width:425px) {
+    .toast {
+        width: 290px;
+    }
+}

@@ -1,0 +1,212 @@
+.wizard-container {
+    padding-bottom: 15px;
+}
+
+.wizard-card {
+    padding: 10px 0;
+}
+
+.wizard-card .wizard-header {
+    padding: 15px;
+}
+
+.wizard-card .wizard-title {
+    font-weight: 300;
+    margin: 0;
+}
+
+.wizard-card .category {
+    color: #9A9A9A;
+}
+
+
+.wizard-card .choice {
+    text-align: center;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.wizard-card .choice input[type="radio"],
+.wizard-card .choice input[type="checkbox"] {
+    position: absolute;
+    left: -10000px;
+    z-index: -1;
+}
+
+.card {
+    padding: 10px 0;
+}
+
+.choice.active .card-checkboxes {
+    color: #F77F00;
+}
+
+.card .card-hover-effect {
+    -webkit-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
+    -moz-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
+    -o-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
+    -ms-transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
+    transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
+}
+
+.card .card-hover-effect:hover {
+    box-shadow: 0px 12px 17px -7px rgba(0, 0, 0, 0.3);
+    -webkit-transform: translateY(-10px);
+    -moz-transform: translateY(-10px);
+    -o-transition: translateY(-10px);
+    -ms-transform: translateY(-10px);
+    transform: translateY(-10px);
+}
+
+.wizard-card .choice i {
+    font-size: 32px;
+    line-height: 55px;
+}
+
+.wizard-card .wizard-navigation {
+    position: relative;
+}
+
+.wizard-card .wizard-navigation .progress-with-circle {
+    position: relative;
+    top: 40px;
+    height: 4px;
+}
+
+.wizard-card .wizard-navigation .progress-bar {
+    background-color: #F77F00;
+}
+
+
+
+.nav-pills {
+    height: 4px;
+    text-align: center;
+}
+
+
+
+.wizard-card .icon-circle [class*="fa-"],
+.wizard-card .icon-circle [class*="imeow-"] {
+    position: absolute;
+    z-index: 1;
+    left: 1px;
+    right: 0px;
+    top: 23px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.wizard-card .icon-circle {
+    font-size: 20px;
+    border: 3px solid #F3F2EE;
+    text-align: center;
+    border-radius: 50%;
+    color: rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    width: 70px;
+    height: 70px;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    position: relative;
+    top: -2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.nav-pills a {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+a.active {
+    color: #F77F00;
+}
+
+a.active:hover {
+    color: #F77F00;
+}
+
+a:hover {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.wizard-footer {
+    padding: 0 15px 5px;
+}
+
+.wizard-card .disabled {
+    display: none;
+}
+
+.btn {
+    display: inline-block;
+}
+
+.tab-content {
+    min-height: 435px;
+    padding: 105px 20px 10px;
+}
+
+.info-text {
+    text-align: center;
+    font-weight: 100;
+    padding-bottom: 18px;
+    padding-top: 12px;
+}
+
+
+
+a.active>.icon-circle {
+    background-color: #F77F00;
+    border-color: #F77F00;
+    transform: scale(1.1);
+}
+
+
+a.active>.icon-circle [class*="fa-"],
+a.active>.icon-circle [class*="imeow-"] {
+    color: #F5FAF4;
+}
+
+.icon-circle.checked {
+    border-color: #F77F00;
+}
+
+
+.btn:focus {
+    box-shadow: none;
+}
+
+
+@media screen and (max-width:425px) {
+    .wizard-card .icon-circle {
+        transform: scale(.78);
+    }
+
+    a.active>.icon-circle {
+        transform: scale(.88);
+    }
+
+}
+
+@media screen and (max-width:375px) {
+    .wizard-card .icon-circle {
+        transform: scale(.68);
+    }
+
+    a.active>.icon-circle {
+        transform: scale(.78);
+    }
+
+}
+
+
+
+@media screen and (max-width:320px) {
+    .wizard-card .icon-circle {
+        transform: scale(.58);
+    }
+
+    a.active>.icon-circle {
+        transform: scale(.68);
+    }
+}

@@ -1,0 +1,74 @@
+{% load static %}
+<div class="sidebar" data-color="white" data-active-color="danger">
+    <div class="logo">
+
+        <a href="/dashboard" class="simple-text logo-normal">
+            <div class="logo-image-small">
+                <img src="{% static 'images/logo.png' %}">
+            </div>
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <ul class="nav">
+            <li>
+                <a href="/dashboard/subscription">
+                    <i class="far fa-credit-card"></i>
+                    <p>ABONELİK</p>
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard/">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <p>KONTROL PANELİ</p>
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard/notifications">
+                    <i class="fas fa-bell"></i>
+                    <p>BİLDİRİMLER</p>
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard/profile">
+                    <i class="fas fa-user"></i>
+                    <p>PROFİLİM</p>
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard/mycat">
+                    <i class="imeow-cat"></i>
+                    <p>KEDİM</p>
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard/orders">
+                    <i class="fas fa-truck"></i>
+                    <p>SİPARİŞLER</p>
+                </a>
+            </li>
+
+            <li>
+                <a href="/dashboard/gift">
+                    <i class="imeow-gift"></i>
+                    <p>HEDİYE</p>
+                </a>
+            </li>
+
+            {% if request.user.is_superuser %}
+            <li>
+                <a href="/dashboard/voting">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>Oylama</p>
+                </a>
+            </li>
+            <!-- <li>
+                <a href="{% url 'pinax_messages:inbox' %}">
+                    <i class="fa fa-envelope"></i>
+                    <p>İLETİŞİM</p>
+                </a>
+            </li> -->
+            {% endif %}
+
+        </ul>
+    </div>
+</div>

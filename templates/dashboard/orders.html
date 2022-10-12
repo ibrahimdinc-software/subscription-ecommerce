@@ -1,0 +1,84 @@
+{% extends 'includes/dashboard/layout.html' %}
+{% load static %}
+{% block body %}
+
+<div class="subscription row justify-content-center" name="sub-content">
+
+    {% if orders %}
+    {% for order in orders %}
+    <div class="col-lg-4 col-md-6" style="display: inline-grid;" name="sub-box">
+        <div class="card">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-muted text-center">Sipariş</h5>
+                <h5 class="card-price text-center">order{{order.id}}</h5>
+                <hr>
+                <ul class="">
+
+
+                    {% if order.payment and order.price != 0 %}
+                    <li>Ödeme Durumu: Ödendi</li>
+                    <li>Ödenen Tutar: {{order.price|floatformat:"2"}}₺</li>
+                    {% elif not order.payment %}
+                    <li>Ödeme Durumu: Ödenmedi</li>
+                    <li>Ödenecek Tutar: {{order.price|floatformat:"2"}}₺</li>
+                    {% endif %}
+                    <li>Sipariş Tarihi: {{order.date}}</li>
+                    {% if order.deliveryDate %}
+                    <li>Teslim Tarihi: {{order.deliveryDate}}</li>
+                    {% endif %}
+                    <li>Sipariş Durumu: {{order.get_status_display}}</li>
+                    <li>Sipariş Tipi: {{order.get_order_type_display}}</li>
+
+                    {% if order.cargo %}
+                    <li>Kargo Kodu: {{order.cargo}}</li>
+                    {% endif %}
+
+
+                    {% if order.fail_message %}
+                    <li>Kargo Kodu: {{order.fail_message}}</li>
+                    {% endif %}
+
+
+
+
+                </ul>
+
+                <form id="cancelForm{{order.id}}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="cancel" value="">
+                    <input type="hidden" name="id" value="{{order.id}}">
+                </form>
+
+                {% if order.order_can_be_canceled %}
+                <div class="mr-auto ml-auto">
+                    <button onclick="popup_modal([8,'cancelForm{{order.id}}'])" name="cancel"
+                        class="btn btn-primary btn-round">İptal/İade Et</button>
+                </div>
+                {% elif order.canceled %}
+                <div class="mr-auto ml-auto">
+                    <a href="/dashboard/orderCancel/{{order.id}}" class="btn btn-primary btn-round">İptal/İade Durumunu
+                        Kontrol Et</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-lg-6 col-md-12" style="display: inline-grid;" name="sub-box">
+        <div class="card text-center">
+            <div class="card-body">
+                <img style="border-radius: 100%;" src="{% static 'images/sadcat.png' %}">
+                <h4 class="">Henüz hiç siparişiniz bulunmuyor.</h4>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+
+
+</div>
+{% endblock body %}

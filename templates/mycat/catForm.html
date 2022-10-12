@@ -1,0 +1,66 @@
+{% load widget_tweaks %}
+
+<form method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+
+    <input type="hidden" name="x" id="id_x">
+    <input type="hidden" name="y" id="id_y">
+    <input type="hidden" name="width" id="id_width">
+    <input type="hidden" name="height" id="id_height">
+    {% render_field form.id  type="hidden" %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Adı</label>
+                {% render_field form.name class="form-control" placeholder="Adı" %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 pr-1">
+            <div class="form-group">
+                <label>Cinsiyet</label>
+                {% render_field form.gender class="textinput textInput form-control"%}
+            </div>
+        </div>
+        <div class="col-md-6 pl-1">
+            <div class="form-group">
+                <label>Durumu</label>
+                {% render_field form.status class="textinput textInput form-control" %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Özel Durum</label>
+                {% render_field form.spec_case class="form-control textarea" placeholder="Kediniz ile ilgili bildirmek istediğiniz özel durumları bu alana yazabilirsiniz." %}
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label for="id_picture">Fotoğraf:</label>
+
+            {% render_field form.picture style="width: 220px;" %}
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="update ml-auto mr-auto">
+            <button type="submit" class="btn btn-primary btn-round">
+
+                {% if form.id.value %}
+                Güncelle
+                {% else %}
+                Ekle
+                {% endif %}
+            </button>
+        </div>
+    </div>
+</form>

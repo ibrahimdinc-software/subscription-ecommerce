@@ -1,0 +1,32 @@
+{% extends "includes/dashboard/layout.html" %}
+
+{% block body %}
+<div class="row justify-content-center">
+
+    {% if not notifs %}
+    <p class="col-12 text-center">Yeni bildiriminiz bulunmuyor.</p>
+    {% endif %}
+    {% if notification.has_old_notifs %}
+    <div class="ml-auto mr-auto">
+        <button id="old_notifications" class="btn btn-primary btn-round m-auto">Eski Bildirimler</button>
+    </div>
+    {% endif %}
+
+</div>
+<div id="old_notifications_row" class="row justify-content-center mt-4" url="{% url 'get-old' %}"></div>
+{% endblock body %}
+
+{% block script %}
+<script>
+    $("#old_notifications").click(function () {
+        var url = $("#old_notifications_row").attr("url");
+
+        $.ajax({
+            url: url,
+            success: function (data) {
+                $("#old_notifications_row").html(data);
+            }
+        });
+    });
+</script>
+{% endblock script %}

@@ -1,0 +1,22 @@
+{% extends "includes/dashboard/layout.html" %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 card h-100 ">
+        <div class="card-body">
+            <h5 class="card-title text-muted text-uppercase text-center">İADE SÜRECİ</h5>
+            <div class="">{{ocm.get_status_display}}</div>
+            {% if ocm.status == '0' %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                    <button name='ok' class="btn btn-block btn-primary text-uppercase">KARGOYA VERDİM</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

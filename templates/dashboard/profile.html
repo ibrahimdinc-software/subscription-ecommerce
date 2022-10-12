@@ -1,0 +1,250 @@
+{% extends "includes/dashboard/layout.html" %}
+{% load static %}
+{% load tag %}
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card card-user">
+            <div class="card-header">
+                <h5 class="card-title">Bilgileri Düzenle</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="userinfo" data-districts-url="{% url 'ajax_load_districts' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="saveSettingsForm" value="">
+
+                    <div class="row">
+                        <p style="margin: 0; padding: 0; color: red;">{{errors|dict_values:"userForm"}}</p>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6 pr-1">
+                                    <div class="form-group">
+                                        <label for="id_first_name">Ad</label>
+                                        <input type="text" name="first_name" value="{{settingsForm.first_name.value}}"
+                                            maxlength="50" required id="id_first_name" class="form-control"
+                                            placeholder="Adınız">
+                                        <p style="margin: 0; padding: 0; color: red;">
+                                            {{errors|dict_values:"first_name"}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 pl-1">
+                                    <div class="form-group">
+                                        <label for="id_last_name">Soyad</label>
+                                        <input type="text" name="last_name" value="{{settingsForm.last_name.value}}"
+                                            maxlength="50" required id="id_last_name" class="form-control"
+                                            placeholder="Soyadınız">
+                                        <p style="margin: 0; padding: 0; color: red;">{{errors|dict_values:"last_name"}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 pr-1">
+                                    <div class="form-group">
+                                        <label for="id_email">E-Posta Adresi</label>
+                                        <input type="email" name="email" value="{{settingsForm.email.value}}"
+                                            maxlength="100" required id="id_email" class="form-control"
+                                            placeholder="E-Posta">
+                                        <p style="margin: 0; padding: 0; color: red;">{{errors|dict_values:"email"}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 pl-1">
+                                    <div class="form-group">
+                                        <label for="id_phone">Telefon Numarası</label>
+                                        <input type="text" name="phone" value="{{settingsForm.phone.value}}"
+                                            placeholder="+90-555-444-3322" maxlength="128" step="3" ;
+                                            class="textinput textInput form-control a" id="id_phone">
+                                        <p style="margin: 0; padding: 0; color: red;">{{errors|dict_values:"phone"}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p style="margin: 0; padding: 0; color: red;">{{errors|dict_values:"addressForm"}}</p>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Adres</label>
+                                        <input type="text" name="first_line" id="id_first_line" class="form-control"
+                                            placeholder="Açık Adres" required
+                                            value="{% if addressForm.first_line.value %}{{addressForm.first_line.value}}{% endif %}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 pr-1">
+                                    <div class="form-group">
+                                        <label>İl</label>
+                                        {% getProvinceList as provinces %}
+                                        <select name="province" class="textinput textInput form-control"
+                                            id="id_province">
+                                            {% for province in provinces %}
+                                            {% if addressForm.province.value == province %}
+                                            <option id="{{forloop.counter}}" value="{{province}}" selected>{{province}}
+                                            </option>
+                                            {% elif not addressForm.province.value and forloop.counter == 34 %}
+                                            <option id="{{forloop.counter}}" value="{{province}}" selected>{{province}}
+                                            </option>
+                                            {% else %}
+                                            <option id="{{forloop.counter}}" value="{{province}}">{{province}}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 pl-1">
+                                    <div class="form-group">
+                                        <label>İlçe</label>
+                                        <select name="district" title="{{addressForm.district.value}}"
+                                            class="textinput textInput form-control" id="id_district">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="update ml-auto mr-auto">
+                            <button name="saveSettingsForm" onclick="popup_modal([0,'userinfo', 'saveSettingsForm'])"
+                                class="btn btn-primary btn-round">Bilgileri
+                                Güncelle</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-user">
+            <div class="card-header">
+                <h5 class="card-title">Şifre Değiştir</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="passwordResetForm" autocomplete="off">
+                    {% csrf_token %}
+                    <input type="hidden" name="changePassword" value="">
+
+                    <p style="margin: 0; padding: 0; color: red;">{{errors|dict_values:"passwordResetForm"}}</p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Eski Şifre</label>
+                                <input type="password" name="password" id="id_password" class="form-control"
+                                    placeholder="Eski Şifre" required value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Yeni Şifre</label>
+                                <input type="password" name="npassword" id="id_npassword" class="form-control"
+                                    placeholder="Yeni Şifre" required value="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Yeni Şifreyi Onayla</label>
+                                <input type="password" name="confirm" id="id_confirm" class="form-control"
+                                    placeholder="Yeni Şifreyi Onayla" required value="">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="update ml-auto mr-auto">
+                        <button name="changePassword" class="btn btn-primary btn-round" id="changePasswordBtn">Şifreyi
+                            Güncelle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+
+{% block script %}
+<script src="{% static 'js/maskphone.js' %}"></script>
+<script>
+    $("#changePasswordBtn").click(function () {
+        var form = $("#passwordResetForm");
+        vali(form);
+        console.log("t1")
+        if (form.valid()) {
+            console.log("t2")
+
+            popup_modal([1, 'passwordResetForm'])
+        }
+
+    });
+
+    function vali(form) {
+        form.validate({
+            // Specify validation rules
+            rules: {
+                password: {
+                    required: true,
+                    minlength: 5
+                },
+                npassword: {
+                    required: true,
+                    minlength: 5
+                },
+                confirm: {
+                    required: true,
+                    minlength: 5,
+
+                }
+            },
+            // Specify validation error messages
+            messages: {
+                password: {
+                    required: "Mevcut şifrenizi girmediniz.",
+                    minlength: "5 karakter veya daha uzun olmalı."
+                },
+                npassword: {
+                    required: "Yeni şifrenizi girmediniz.",
+                    minlength: "5 karakter veya daha uzun olmalı."
+                },
+                confirm: {
+                    required: "Yeni şifrenizi onaylamadınız.",
+                    minlength: "5 karakter veya daha uzun olmalı."
+                }
+            },
+            // Make sure the form is submitted to the destination defined
+            // in the "action" attribute of the form when valid
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    }
+
+
+    function get_districts() {
+        console.log($("#id_district").attr("title"));
+        var url = $("#userinfo").attr("data-districts-url");
+        var provinceId = $("#id_province").val();
+        $.ajax({
+            url: url,
+            data: {
+                'province': provinceId,
+                'selected': $("#id_district").attr("title")
+            },
+            success: function (data) {
+                $("#id_district").html(data);
+            }
+        });
+    }
+    $(document).ready(function () {
+        get_districts();
+    });
+    $("#id_province").change(function () {
+        get_districts();
+    });
+</script>
+{% endblock script %}

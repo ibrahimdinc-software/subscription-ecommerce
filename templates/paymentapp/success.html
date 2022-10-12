@@ -1,0 +1,14 @@
+{% extends "includes/dashboard/layout.html" %}
+{% block body %}
+<h1>ÖDEME BAŞARILI</h1>
+{% endblock body %}
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            $.get("{% url 'gift' %}") // Do something after 5 seconds
+        }, 5000);
+    });
+</script>
+{% endblock script %}

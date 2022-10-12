@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/toast.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' type='image/x-icon' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/meowapple.png' %}">
+    <meta name="description"
+        content="Kedilerimizin hoş vakit geçirmeleri için onlara her ay sürpriz kutu gönderiyoruz.">
+    <meta name="keywords"
+        content="kedi, kutu, aylık, oyuncak, mama, sürpriz, kedi maması, kedi kutusu, kedi aboneliği, kedi hediyesi">
+    <meta name="theme-color" content="#e9e9e9" />
+
+    <script type="text/javascript">
+        (function () {
+            var css = document.createElement('link');
+            css.href = 'https://use.fontawesome.com/releases/v5.8.2/css/all.css';
+            css.rel = 'stylesheet';
+            css.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(css);
+        })();
+    </script>
+    <style>
+        .cat-paw-repeat {
+            background-color: #E9E9E9;
+        }
+
+        p {
+            hyphens: none;
+        }
+    </style>
+    <title>Meow Meow Geliyor!</title>
+
+</head>
+
+<body class="cat-paw-repeat">
+
+    <div class="navbar justify-content-center" style=" background-color: #e9e9e9;">
+
+        <a href="/" class="navbar-brand">
+            <picture>
+                <source srcset="{% static 'images/logo.webp' %}" type="image/webp">
+                <source srcset="{% static 'images/logo.png' %}" type="image/jpeg">
+                <img style="height: 100px;" class="sidebar-image" alt="MeowMeow.com.tr logo."
+                    src="{% static 'images/logo.png' %}">
+            </picture>
+
+        </a>
+    </div>
+
+    <div class="container">
+        {% include "includes/toast.html" %}
+    </div>
+    <div class="content mt-5">
+        <div class="row mx-0 justify-content-center align-items-center">
+
+            <div class="col-md-7 text-center px-4 mb-5">
+                <picture>
+                    <source srcset="{% static 'images/product.webp' %}" type="image/webp">
+                    <source srcset="{% static 'images/product.png' %}" type="image/jpeg">
+                    <img src="{% static 'images/product.png' %}" alt=" Kediler için abonelik sistemi ile sürpriz kutu."
+                        style="max-height: 300px;" class="img-fluid">
+                </picture>
+
+                <div class="row mt-3">
+                    <div class="col-lg-6 px-4">
+                        <div class="info-box">
+                            <h3 style="color: #60c2ce;">Kutu Kutu Mutluluk Çok Yakında Sizlerle...</h3>
+                            <p class="content">
+                                Minik dostlarımızı sevindirecek haber. Onların da hediye almaya hakları olduğunu
+                                düşündük
+                                büyük
+                                bir sürpriz yaptık. Kutu Kutu Mutluluklarla ÇOK YAKINDA sizlerleyiz...
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6 px-4">
+                        <div class="info-box">
+                            <h3 style="color: #60c2ce;">Meow meow nedir?</h3>
+                            <ul style="text-align: left; padding-left: 25px;">
+                                <li>Her ay minik dostlarımız için bir mutluluk kutusu!</li>
+                                <li>Her kutuda yaş mama, oyuncak, ödül maması gibi mutluluk garantili en az 4 sürpriz
+                                    ürün😻</li>
+                                <li>Ve aldığınız her kutuyla sokaktaki dostlarımıza mama bağışı!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="col-md-5 px-4 mb-5">
+                <div class="info-box card-container text-center mx-auto">
+                    <h5>Geldiğimizden haberdar olmak ve başlangıca özel ilk kutuda 25₺ indirim kazanmak için formu
+                        doldurmanız yeterli. </h5>
+                    <hr class="little">
+                    <form method="POST" class="form-signin">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_full_name">Ad Soyad</label>
+                            <input type="text" name="full_name" id="id_full_name" class="form-control"
+                                placeholder="Adınız Soyadınız" required="" minlength="5"
+                                value="{% if form.full_name.value %}{{form.full_name.value}}{% endif %}">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_email">E-Posta Adresi</label>
+                            <input type="email" name="email" id="id_email" class="form-control"
+                                placeholder="E-Posta Adresiniz" required=""
+                                value="{% if form.email.value %}{{form.email.value}}{% endif %}">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_phone">Telefon Numarası <small>(Opsiyonel)</small> </label>
+                            <input type="tel" name="phone" id="id_phone" class="form-control"
+                                placeholder="Telefon Numaranız"
+                                value="{% if form.phone.value %}{{form.phone.value}}{% endif %}">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check-inline">
+                                <input type="checkbox" class="form-check-input" id="checkbox" style="width: 40px;"
+                                    required>
+                                <label class="" for="checkbox">
+                                    <a href="#" data-toggle="modal" data-target="#kvkk">Kişisel verilerin korunması</a>
+                                    ile ilgili açıklamayı okudum,
+                                    onaylıyorum.
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-success" name="submit_button">Meow!</button>
+                    </form>
+
+                    <p class="mt-2 mb-0"> Kampanyadan {{participant}} kişi yararlandı.</p>
+                </div>
+
+            </div>
+            <div class="col-md-12 row ">
+                <div class="col-12 text-center">
+
+                    <h3>Fiyatlarımız</h3>
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <div class="info-box">
+                        <h3 class="text-center" style="color: #60c2ce;">Abonelik</h3>
+                        <ul>
+                            <li>69,90₺ dan başlayan fiyatlarla</li>
+                            <li style="list-style: none;">Paket içeriğimiz:</li>
+                            <li>En az bir adet konserve mama</li>
+                            <li>En az bir adet oyuncak</li>
+                            <li>Her pakette en az dört tane ürün.</li>
+                        </ul>
+                        <br>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-box">
+                        <h3 class="text-center" style="color: #60c2ce;">Hediye</h3>
+                        <ul>
+                            <li>79,90₺</li>
+                            <li style="list-style: none;">Paket içeriğimiz:</li>
+                            <li>En az bir adet konserve mama</li>
+                            <li>En az bir adet oyuncak</li>
+                            <li>En az dört tane ürün.</li>
+                            <li>Sürpriz ekleme seçeneği.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="visitor">
+        <p>{{online}} kişi ziyaret ediyor</p>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="cookies"
+        aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="myLargeModalLabel">Çerez Politikası</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Çerezleri sadece trafiği izlemek ve pazarlama için kullanıyoruz.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="contact"
+        aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="myLargeModalLabel">İletişim</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Çalışma saatlerimiz: 10.00 - 20.00
+                    </p>
+                    <p>
+                        Bize ulaşın: 0536 777 5353
+                        <br>
+                        Bize ulaşın: 0541 783 7344
+                        <br>
+                        info@meowmeow.com.tr
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="kvkk"
+        aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="myLargeModalLabel">Kişisel Verilerin Korunması </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 style="color: #60c2ce;">KİŞİSEL VERİLERİN İŞLENMESİNE İLİŞKİN AYDINLATMA METNİ</h5>
+
+                    <ul style="list-style: decimal;">
+                        <li>Aydınlatma Metni’nin Amacı ve Şirketimizin Veri Sorumlusu Konumu: Şirketimiz Spry Software
+                            (“MeowMeow.com.tr” ve/veya “Şirket”), müşterilere ilişkin kişisel veriler bakımından 6698
+                            sayılı Kişisel Verilerin Korunması Kanunu (“Kanun”)
+                            kapsamında “veri sorumlusu” sıfatına sahip olup işbu Aydınlatma Metni ile söz konusu Kanun
+                            uyarınca müşterilerin MeowMeow.com.tr tarafından gerçekleştirilen kişisel veri işleme
+                            faaliyetleri hakkında aydınlatılması hedeflenmektedir.
+                        </li>
+                        <li>
+                            Müşterilere Ait Kişisel Verilerin İşlenme Amacı: Müşterilere ait kişisel veriler,
+                            MeowMeow.com.tr tarafından sunulan ürün ve hizmetlerden ilgili kişileri faydalandırmak için
+                            gerekli çalışmaların iş birimleri tarafından yapılması ve ilgili iş süreçlerinin
+                            yürütülmesi, MeowMeow.com.tr tarafından yürütülen ticari faaliyetlerin gerçekleştirilmesi
+                            için ilgili iş birimleri tarafından gerekli çalışmaların yapılması ve buna bağlı iş
+                            süreçlerinin yürütülmesi, MeowMeow.com.tr’nin ticari
+                            ve/veya iş stratejilerinin planlanması ve icrası, MeowMeow.com.tr’nin ve MeowMeow.com.tr ile
+                            iş ilişkisi içerisinde olan ilgili kişilerin hukuki, teknik ve ticari iş güvenliğinin temini
+                            de dahil olmak üzere Kanun’un 5. ve 6.
+                            maddelerinde belirtilen kişisel veri işleme şartları ve amaçları çerçevesinde işlenmektedir.
+                            Kişisel verilerin işlenmesine ilişkin detaylı bilgilere MeowMeow.com.tr Tarafından 6698
+                            sayılı Kanun Kapsamında Kişisel Verilerin
+                            İşlenmesi ve Korunmasına İlişkin Politika’dan ulaşılabilecektir.
+
+                        </li>
+                        <li>
+
+                            Müşterilerin Açık Rızası Doğrultusunda İşlenecek Kişisel Veriler ve İşleme Amaçları: Açık
+                            rıza doğrultusunda işlenecek kişisel veriler ve işleme amaçları Rıza Metni’nde
+                            belirtilmiştir.
+
+
+                        </li>
+                        <li>
+
+                            Müşterilere Ait Kişisel Verilerin Aktarımı: Müşterilere ait kişisel veriler, MeowMeow.com.tr
+                            tarafından sunulan ürün ve hizmetlerden ilgili kişileri faydalandırmak için gerekli
+                            çalışmaların iş birimleri tarafından yapılması ve ilgili iş süreçlerinin yürütülmesi,
+                            MeowMeow.com.tr tarafından yürütülen ticari faaliyetlerin gerçekleştirilmesi için ilgili iş
+                            birimleri tarafından gerekli çalışmaların yapılması ve buna bağlı iş süreçlerinin
+                            yürütülmesi, MeowMeow.com.tr’nin ticari ve/veya iş
+                            stratejilerinin planlanması ve icrası, MeowMeow.com.tr’nin ve MeowMeow.com.tr ile iş
+                            ilişkisi içerisinde olan ilgili kişilerin hukuki, teknik ve ticari iş güvenliğinin temini
+                            için gerekli olan aktivitelerin planlanması ve icrası
+                            da dahil olmak üzere Kanun’un 8. ve 9. maddelerinde belirtilen kişisel veri işleme şartları
+                            ve amaçları çerçevesinde Spry Software şirketi, Şirket yetkilileri, iştiraklerimiz, iş
+                            ortaklarımız, tedarikçilerimiz, kanunen yetkili
+                            kamu kurum ve kuruluşları ile özel kurumlar ile paylaşılabilecektir.
+
+                        </li>
+                        <li>
+
+                            Kişisel Verilerin Toplanma Yöntemi ve Hukuki Sebebi: Kişisel veriler, müşterilerden
+                            elektronik ortamda toplanmaktadır. Yukarıda belirtilen hukuki sebeplerle toplanan kişisel
+                            veriler Kanun’un 5. ve 6. maddelerinde ve bu Aydınlatma Metni ve açık rıza gerekli
+                            olduğu hallerde Rıza Metni’nde belirtilen amaçlarla işlenebilmekte ve aktarılabilmektedir.
+
+                        </li>
+                        <li>
+
+                            Kişisel Veri Sahibi Olarak Müşterilerin Hakları: Kanun’un 11. maddesi uyarınca veri
+                            sahipleri; (i) kendileri ile ilgili kişisel veri işlenip işlenmediğini öğrenme, (ii) kişisel
+                            verileri işlenmişse buna ilişkin bilgi talep etme, (iii) kişisel verilerin
+                            işlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme, (iv) yurt
+                            içinde veya yurt dışında kişisel verilerin aktarıldığı üçüncü kişileri bilme, (v) kişisel
+                            verilerin eksik veya yanlış işlenmiş olması
+                            hâlinde bunların düzeltilmesini isteme ve bu kapsamda yapılan işlemin kişisel verilerin
+                            aktarıldığı üçüncü kişilere bildirilmesini isteme, (vi) Kanun ve ilgili diğer kanun
+                            hükümlerine uygun olarak işlenmiş olmasına rağmen,
+                            işlenmesini gerektiren sebeplerin ortadan kalkması hâlinde kişisel verilerin silinmesini
+                            veya yok edilmesini isteme ve bu kapsamda yapılan işlemin kişisel verilerin aktarıldığı
+                            üçüncü kişilere bildirilmesini isteme, (vii) işlenen
+                            verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle kişinin
+                            kendisi aleyhine bir sonucun ortaya çıkmasına itiraz etme ve (viii) kişisel verilerin kanuna
+                            aykırı olarak işlenmesi sebebiyle zarara uğraması
+                            hâlinde zararın giderilmesini talep etme haklarına sahiptir.
+
+
+                        </li>
+                    </ul style="list-style: decimal;">
+                    <p>Söz konuhakların kullanımına ilişkin talepler, kişisel veri sahipleri tarafından MeowMeow.com.tr
+                        Tarafından 6698 sayılı Kanun Kapsamında Kişisel Verilerin İşlenmesi ve Korunmasına İlişkin
+                        Politika‘da belirtilen yöntemlerle iletilebilecektir.
+                        MeowMeow.com.tr, söz konusu talepleri değerlendirerek 30 gün içerisinde sonuçlandıracaktır.
+                        MeowMeow.com.tr’nin taleplere ilişkin olarak Kişisel Verileri Koruma Kurulu tarafından
+                        belirlenen (varsa) ücret tarifesi üzerinden ücret
+                        talep etme hakkı saklıdır.
+                    </p>
+                    <h5 style="color: #60c2ce;">KİŞİSEL VERİLERİN İŞLENMESİNE İLİŞKİN RIZA METNİ</h5>
+                    <p>
+                        Şirketimiz Spry Software (“MeowMeow.com.tr” ve/veya “Şirket”), müşterilere ilişkin kişisel
+                        veriler bakımından 6698 sayılı Kişisel Verilerin Korunması Kanunu (“Kanun”) kapsamında “veri
+                        sorumlusu” sıfatına sahip olup işbu Rıza Metni ile söz konusu Kanun
+                        uyarınca müşterilerin MeowMeow.com.tr tarafından gerçekleştirilen ve aşağıda belirtilen kişisel
+                        veri işleme faaliyetlerine ilişkin açık rızalarının temini hedeflenmektedir. Kanun’un 5/2 ile
+                        6/3 maddesinde yer alan kişisel veri
+                        işleme şartlarının karşılanamadığı aşağıdaki durumlar için MeowMeow.com.tr tarafından kişisel
+                        verilerin işlenebilmesi için müşterilerin açık rızasının alınması gerekmektedir. Açık rıza
+                        gerektirmeyen süreçlere ilişkin olarak Aydınlatma
+                        Metni kapsamında veri işleme faaliyetleri sürdürülmekte olup açık rıza gerektiren süreçlerde de
+                        Aydınlatma Metni’nde belirtilen temel prensiplere uygun veri işlenmektedir. Bu kapsamda
+                        müşterilerin kişisel verileri MeowMeow.com.tr
+                        Tarafından 6698 sayılı Kanun Kapsamında Kişisel Verilerin İşlenmesi ve Korunmasına İlişkin
+                        Politika‘da Bölüm 3 – Madde IV altında belirtilen amaçlarla ve buradaki usule uygun olarak
+                        işlenmektedir. Buna göre kişisel veriler; müşterilere
+                        yönelik kampanyaların oluşturulması, MeowMeow.com.tr iş ortakları tarafından MeowMeow.com.tr
+                        müşterilerine MeowMeow.com.tr’de kullanabilecekleri özel fırsatların sunulması, çapraz satış
+                        yapılması, hedef kitle belirlenmesi, Müşteri
+                        hareketlerinin takip edilerek kullanıcı deneyimini arttırıcı faaliyetlerin yürütülmesi,
+                        MeowMeow.com.tr’ye ait internet sitesinin işleyişinin geliştirilmesi ve Müşteri ihtiyaçlarına
+                        göre kişiselleştirilmesi, doğrudan ve doğrudan
+                        olmayan pazarlama, kişiye özel pazarlama ve yeniden pazarlama faaliyetlerinin yürütülmesi,
+                        kişiye özel segmentasyon, hedefleme, analiz ve şirket içi raporlama faaliyetlerinin yürütülmesi,
+                        pazar araştırmaları, müşteri memnuniyeti
+                        aktivitelerinin planlanması ve icrası, MeowMeow.com.tr’nin sunduğu ürün ve hizmetlerin ilgili
+                        kişilerin beğeni, kullanım alışkanlıkları ve ihtiyaçlarına göre özelleştirilerek ilgili kişilere
+                        önerilmesi ve tanıtılması ile müşteri
+                        ilişkileri yönetimi süreçlerinin planlanması ve icrası amaçları da dahil olmak üzere genel
+                        anlamda MeowMeow.com.tr’nin ürün ve/veya hizmetlerinin satış ve pazarlama süreçlerinin
+                        planlanması ve icrası, MeowMeow.com.tr’nin sunduğu
+                        ürün ve/veya hizmetlere bağlılık oluşturulması ve/veya arttırılması süreçlerinin planlanması ve
+                        icrası kapsamında Müşteri’nin vereceği onayı doğrultusunda işlenebilecek ve bu amaçlara yönelik
+                        olarak Aydınlatma Metni’nde belirtilen
+                        taraflarla paylaşılabilecektir.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="about-us"
+        aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="myLargeModalLabel">Hakkımızda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="header-title text-center">
+                        <h5 style="color: #60c2ce;">MEOW!</h5>
+                    </div>
+                    <p style="text-indent: 10px;">
+                        Minik dostlarımızın nelere ihtiyaçlarının olduğunu gözlemledik ve siz anne-babalar için büyük
+                        bir sürprizle geliyoruz. Hepsi birbirinden farklı ve güzel kutularla miniklerimizi eğlendirirken
+                        üstünüzden küçük yükleri atacağız. Eğlendirirken öğretimlerine
+                        katkı sağlayacak bazen de şımartacağız.
+                    </p>
+                    <p style="text-indent: 10px;">
+                        İçlerinde mutluluklarına mutluluk katmak için ödül mamaları, eğlencelerini arttırmak için
+                        sürpriz birçok hediye ve daha fazlası olan bu heyecan verici kutular çok yakında sizlerle
+                        buluşuyor.
+                    </p>
+                    <p style="text-indent: 10px;">
+
+                        Bunları yaparken kimsenin bütçesini de unutmadık. Daha fazla miniğimizi sevindirmek için
+                        dışarıdaki fiyatların çok altında fiyatlarla geliyoruz. Miniklerimizin yüzündeki mutluluğu
+                        izlerken sizin de yüzünüzdeki gülümsemeye bir katkı da biz sağlamak istiyoruz.
+                    </p>
+                    <p style="text-indent: 10px;">
+                        Beklemede kalın çok yakında tanışacağız ...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-5 py-3" style="position: relative;">
+        <div class="row m-0">
+            <div class="col-md-6 align-self-center">
+                <div class="nav">
+                    <a href="" data-toggle="modal" data-target="#cookies">Çerez Politikası</a>
+                    <a href="" data-toggle="modal" data-target="#contact">İletişim Bilgileri</a>
+                    <a href="" data-toggle="modal" data-target="#about-us">Hakkımızda</a>
+                    <a href="/mesafelisatis" target="_blank">Mesafeli Satış Sözleşmesi</a>
+                    <a href="/teslimatiade" target="_blank">Teslimat İade Koşulları</a>
+                </div>
+
+            </div>
+
+            <div class="col-md-6 text-right align-self-center pr-5">
+                <a href="https://www.facebook.com/Meowmeowcomtr-106540600836723/" rel="noopener noreferrer"
+                    target="_blank"><i class="fab fa-facebook-f fa-2x"></i>
+                </a>
+                <a href="https://twitter.com/meowmeowcomtr" rel="noopener noreferrer" target="_blank"><i
+                        class="fab fa-twitter fa-2x"></i></a>
+                <a href="https://www.instagram.com/meowmeowcomtr/" rel="noopener noreferrer" target="_blank"><i
+                        class="fab fa-instagram fa-2x"></i></a>
+            </div>
+
+        </div>
+        <div style="text-align: center; color: white; font-size: 15px;">Copyright © Spry Software 2020</div>
+    </footer>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/maskphone.js' %}"></script>
+    <script>
+        function closeAlert() {
+            var element = document.getElementsByClassName("alert");
+            element[0].remove();
+        }
+        $(document).ready(function () {
+            $('.toast').toast('show');
+
+        });
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151438298-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-151438298-1');
+    </script>
+    <!-- Facebook Pixel Code -->
+    <script>
+        ! function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1386350481573362');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1386350481573362&ev=PageView&noscript=1" /></noscript>
+    <!-- End Facebook Pixel Code -->
+
+</body>
+
+</html>

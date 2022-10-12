@@ -1,0 +1,27 @@
+{% extends "includes/loglayout.html" %} {% block body %}
+
+<h2>Kayıt Ol</h2>
+<hr class="little mt-0">
+<form method="post" class="form-signin" id="register_form"
+    oninput="confirm.setCustomValidity(confirm.value != password.value ? 'Parolalar eşleşmiyor.':'')">
+    {% csrf_token %} {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{request.GET.next}}"> {% endif %}
+
+    <input type="text" name="first_name" class="form-control" placeholder="İsim" minlength="2" required
+        id="id_first_name">
+    <input type="text" name="last_name" class="form-control" placeholder="Soyisim" minlength="2" required
+        id="id_last_name">
+    <input type="email" name="email" class="form-control" placeholder="E-Posta" minlength="4" required id="id_email">
+    <input type="password" name="password" class="form-control" placeholder="Parola" minlength="6" required
+        id="id_password">
+    <input type="password" name="confirm" class="form-control" placeholder="Parolayı Doğrula" minlength="6" required
+        id="id_confirm">
+    <input type="checkbox" required id="gizuyecheck">
+    <label for="gizuyecheck"> <a href="#" data-toggle="modal" data-target="#uyelik">Üyelik sözleşmesi</a> ve <a href="#"
+            data-toggle="modal" data-target="#gizlilik">gizlilik politikasını</a> kabul ediyorum.
+    </label>
+    <button class="btn btn-lg btn-outline-success btn-block btn-signin" id="register_btn"
+        onclick="ga('send','pageview', '/virtual/register')" type="submit">Kayıt Ol</button>
+</form>
+<a href="/login?next={{request.GET.next}}">Zaten üye misiniz?</a>
+<a href="/">Anasayfa</a> {% endblock body %}

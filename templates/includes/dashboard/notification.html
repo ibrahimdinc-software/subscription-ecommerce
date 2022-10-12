@@ -1,0 +1,36 @@
+<div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="card card-stats">
+        <div class="card-body ">
+            <div class="row">
+                <div class="col-sm-12 col-md-2">
+                    <div class="icon-big text-center icon-warning">
+                        <i style="color:#60c2ce" class="fas fa-bell"></i>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-10">
+                    <div class="numbers">
+                        <p class="card-category">{{notif.notification.name}}</p>
+                        <p class="card-title" style="font-size: 16px;">
+                            {{notif.notification.content}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer ">
+            <hr>
+            <div class="row">
+                <div class="col-6">
+                    <div class="stats">
+                        <i class="fas fa-sync-alt"></i>{{notif.get_time}}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <p class="card-category" style="margin: 0; text-align: right;"> {{notif.notification.subject}}</p>
+                
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

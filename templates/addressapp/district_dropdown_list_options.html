@@ -1,0 +1,9 @@
+{% for dist in districts %}
+{% if selected == dist %}
+  
+<option value="{{dist}}" selected>{{dist}}</option>
+{% else %}
+
+<option value="{{dist}}">{{dist}}</option>
+{% endif %}
+{% endfor %}

@@ -1,0 +1,37 @@
+{% extends 'includes/dashboard/layout.html' %} {% block body %}
+{% load widget_tweaks %}
+<div class="row justify-content-center">
+    <div class="card col-md-8">
+        <div class="card-header">
+            <h3 class="card-title">Yeni Talep Oluştur</h3>
+
+        </div>
+        <hr class="m-0">
+        <div class="card-body">
+            <form class="comment-form" action="/messages/create/" method="post">
+                {% csrf_token %}
+
+                <input type="hidden" value="1" name="to_user" id="id_to_user">
+
+                <label for="id_subject">Konu:</label>
+                {% render_field form.subject class="form-control mb-3" placeholder="Konu" %}
+                {% for error in form.subject.errors %}
+                <p class="error-list">{{error}}</p>
+                {% endfor %}
+
+                <label for="id_subject">İçerik:</label>
+                {% render_field form.content class="form-control" placeholder=" İçerik" %}
+                {% for error in form.content.errors %}
+                <p class="error-list">{{error}}</p>
+                {% endfor %}
+
+
+
+                <div class="form-actions">
+                    <button class="btn btn-primary btn-block">Gönder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock body %}

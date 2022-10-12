@@ -1,0 +1,207 @@
+{% extends "includes/dashboard/layout.html" %} {% load static %}
+{% load tag %}
+{% block header %}
+
+<link href="{% static 'css/cropper.css' %}" rel="stylesheet">
+
+{% endblock header %}
+
+{% block body %}
+
+<div class="row justify-content-center">
+    {% for cat in cats %}
+
+    <div class="col-md-4">
+        <div class="card card-user">
+            <div class="image">
+                <img src="/static/images/background.jpg" alt="...">
+            </div>
+            <div class="card-body">
+                <div class="author">
+
+                    {% if cat.picture %}
+                    <img class="avatar border-gray" src="{{cat.picture.url}}" alt="...">
+                    {% else %}
+                    <img class="avatar border-gray" src="{% static 'images/meowprofile.png' %}" alt="...">
+                    {% endif %}
+
+                    <h5 class="title">{{cat.name}}</h5>
+                </div>
+            </div>
+            <div class="card-footer">
+                <hr>
+                <div class="button-container">
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            <a href="#" name="EditCat" cat="{{cat.id}}">
+                                <i class="fas fa-pen fa-2x"></i>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a onclick="popup_modal([6],'/mycat/deletecat/{{cat.id}}')" style="cursor:pointer;"
+                                name="DeleteCat">
+                                <i class="fas fa-trash fa-2x" style="color:#ff5746"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+    <div class="col-md-4">
+        <div class="card card-user">
+            <div class="avatar m-auto">
+                <div style="background-color: white; border-radius: 100%; height: 100%;">
+                    <a href="#" id="addnew">
+                        <i class="m-auto fas fa-plus fa-5x" style="right: 25%; top: 20%; position: absolute;"></i>
+                    </a>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center anim disp-none" id="form-box">
+
+    <div class="col-md-8">
+        <div class="card card-user">
+            <div class="card-header row">
+                <h5 class="card-title col-11">Can Dostunu Tanıt</h5>
+                <button class="col-1 close"><i class="fas fa-times" onclick="hideForm();"></i></button>
+            </div>
+            <div class="card-body" id="form_body">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL TO CROP THE IMAGE -->
+<div class="modal fade" id="modalCrop" tabindex="-1" data-backdrop="static" role="dialog"
+    aria-labelledby="modalCropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Fotoğrafı Kırp</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <img src="" id="image" style="max-width: 100%;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="dismiss">Vazgeç</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary js-crop-and-upload">Kırp</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %} {% block script %}
+<script src="{% static 'js/cropper.js' %}"></script>
+<script src="{% static 'js/jquery-cropper.js' %}"></script>
+<script>
+    $(function () {
+
+        $("#dismiss").on('click', function () {
+            $("#id_picture").val('');
+        });
+
+
+        /* SCRIPT TO OPEN THE MODAL WITH THE PREVIEW */
+
+        $(document).on('change', '#id_picture', function () {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#image").attr("src", e.target.result);
+                    $("#modalCrop").modal("show");
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        /* SCRIPTS TO HANDLE THE CROPPER BOX */
+        var $image = $("#image");
+        var cropBoxData;
+        var canvasData;
+        $("#modalCrop").on("shown.bs.modal", function () {
+            $image.cropper({
+                viewMode: 0,
+                aspectRatio: 1 / 1,
+                minCropBoxWidth: 200,
+                minCropBoxHeight: 200,
+                movable: false,
+                zoomable: false,
+                zoomOnTouch: false,
+                zoomOnWheel: false,
+                ready: function () {
+                    $image.cropper("setCanvasData", canvasData);
+                    $image.cropper("setCropBoxData", cropBoxData);
+                }
+            });
+        }).on("hidden.bs.modal", function () {
+            cropBoxData = $image.cropper("getCropBoxData");
+            canvasData = $image.cropper("getCanvasData");
+            $image.cropper("destroy");
+        });
+
+        /* SCRIPT TO COLLECT THE DATA AND POST TO THE SERVER */
+        $(".js-crop-and-upload").click(function () {
+            var cropData = $image.cropper("getData");
+            $("#id_x").val(cropData["x"]);
+            $("#id_y").val(cropData["y"]);
+            $("#id_height").val(cropData["height"]);
+            $("#id_width").val(cropData["width"]);
+            $("#formUpload").submit();
+        });
+    });
+
+    $("[cat]").on('click', function () {
+        $.ajax({
+            url: '{% url "instanceForm" %}',
+            data: {
+                'cat_id': $(this).attr("cat")
+            },
+            dataType: 'html',
+            success: function (data) {
+                /*
+                for (var i in data.attr) {
+                    document.getElementById("id_" + data.attr[i]).value = data[data.attr[i]];
+                    console.log(data[data.attr[i]]);
+                }
+                */
+                document.getElementById("form-box").classList.remove("disp-none");
+                document.getElementById("form_body").innerHTML = data;
+            }
+        });
+    });
+
+
+    $("#addnew").click(function () {
+        $.ajax({
+            url: '{% url "instanceForm" %}',
+            data: {
+                'cat_id': null
+            },
+            dataType: 'html',
+            success: function (data) {
+                document.getElementById("form-box").classList.remove("disp-none");
+                document.getElementById("form_body").innerHTML = data;
+            }
+        });
+
+    });
+
+    function hideForm() {
+
+        document.getElementById("form_body").innerHTML = "";
+        document.getElementById("form-box").classList.add("disp-none");
+    }
+</script>
+{% endblock script %}

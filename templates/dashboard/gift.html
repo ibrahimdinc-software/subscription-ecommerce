@@ -1,0 +1,382 @@
+{% extends "includes/dashboard/layout.html" %}
+{% load tag %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block body %}
+<div class="pricing row justify-content-center">
+
+    {% if gift %}
+    <div class="col-lg-4">
+
+        <button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#orders"
+            aria-expanded="false" aria-controls="orders">
+            ↓ ÖNCEKİ SİPARİŞLERİMİ GÖSTER ↓
+        </button>
+        <div class="collapse" , id="orders">
+
+            {% for g in gift %}
+            <div class="card card-user">
+                <div class="image">
+                    <img src="/static/images/background.jpg" alt="...">
+                </div>
+                <div class="card-body">
+                    <div class="author">
+
+                        <img class="avatar border-gray" src="{% static 'images/meowprofile.png' %}" alt="...">
+
+                        <h5 class="title">{{g.name}}</h5>
+                    </div>
+                    <hr>
+                    <ul>
+                        <li>Bez Çanta: {% if g.want_bag == "false" %}İstemiyorum{% else %}İstiyorum{% endif %}</li>
+                        <li>Özel Not: {% if g.spec_note %}{{g.spec_note}}{% else %}İstemiyorum{% endif %}</li>
+                        <li>Özel Durum: {% if g.spec_case %}{{g.spec_case}}{% else %}Yok{% endif %}</li>
+
+                        {% with g.order as go %}
+                        <li>Ödenen Tutar: {{go.price|floatformat:"2"}}₺</li>
+                        <li>Sipariş Tarihi: {{go.date}}</li>
+                        <li>Sipariş Durumu: {{go.get_status_display}}</li>
+
+                        {% if go.cargo %}
+                        <li>Kargo Kodu: {{go.cargo}}</li>
+                        {% endif %}
+
+                        {% if go.fail_message %}
+                        <li>Kargo Kodu: {{go.fail_message}}</li>
+                        {% endif %}
+                        {% endwith %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-lg-4">
+        <div class="card mb-5 mb-lg-0" name="pricing" id="{{pricing.code}}">
+            <i class="imeow-ribbon45 gift-ribbon"></i>
+            <div class="card-body ">
+
+                <div class="text-center">
+                    <img src="{{pricing.picture.url}}" class="img-fluid img-thumbnail w-75 border-0">
+                </div>
+                <h5 class="card-title text-muted text-uppercase text-center">{{pricing.name}}</h5>
+
+
+                <h6 class="card-price text-center">{{pricing.get_discount_price|floatformat:"2"}}₺
+                </h6>
+                <hr>
+                <ul class="fa-ul">
+                    {% for feat in pricing.features.all %}
+                    <li><span class="fa-li"><i class="fas fa-check"></i></span>{{feat.name}}</li>
+                    {% endfor %}
+
+                </ul>
+                <div class="form-group mt-auto mb-2">
+                    <label for="id_catn">Hediyeyi göndermek istediğiniz kedinin adını yazınız.(opsiyonel)</label>
+                    <input type="text" class="form-control" name="catn" id="id_catn" placeholder="Kedinin adı">
+                </div>
+                <div class="form-group mt-auto mb-2">
+                    <label for="id_case">Hediyeyi göndermek istediğiniz kedi hakkında özel durumları buradan
+                        bildiriniz.(opsiyonel)</label>
+                    <textarea class="form-control" name="case" id="id_case"
+                        placeholder="Kısırlık durumu, yaş, alerji vb..."></textarea>
+                </div>
+                <div class="form-group mt-auto mb-2 gift-plus-box">
+                    <div class="row">
+                        <div class="col-5">
+                            <img class="img-fluid gift-plus" src="{% static 'images/canta.png' %}" alt="">
+                        </div>
+                        <div class="col-7 align-self-center">
+                            <div class="form-check-inline">
+                                <input type="checkbox" class="form-check-input" name="bag" id="id_bag"
+                                    style="margin-top: -3px;" required="">
+                                <label class="" for="id_bag">Bez çanta istiyorum.(+10₺)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mt-auto mb-2 gift-plus-box">
+                    <div class="row">
+
+                        <div class="col-5">
+                            <img class="img-fluid gift-plus" src="{% static 'images/kartvizit.png' %}" alt="">
+                        </div>
+
+                        <div class="col-7 align-self-center">
+                            <div class="form-check-inline">
+                                <input type="checkbox" class="form-check-input" name="spec_check" id="id_spec_check"
+                                    style="margin-top: -3px;" required="">
+                                <label class="" for="id_spec_check">Özel not istiyorum.(+2₺)</label>
+                            </div>
+                            <div class="form-check-inline">
+                                <textarea class="form-control" name="spec" id="id_spec"
+                                    placeholder="Notunuzu buraya giriniz..." style="display: none;"
+                                    type="text"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <article class="card mb-5 mb-lg-0">
+            <div class="card-body p-4">
+                <form method="post" id="paymentForm">
+                    <input type="hidden" name="pricing" id="id_pricing" value="{{pricing.code}}">
+                    {% render_field giftForm.want_bag type="hidden" %}
+                    {% render_field giftForm.spec_note type="hidden" %}
+                    {% render_field giftForm.spec_case type="hidden" %}
+                    {% render_field giftForm.catname type="hidden" %}
+                    {% csrf_token %}
+                    <p class="card-category numbers text-center">Gönderim Bilgileri</p>
+                    <div class="form-group">
+                        <label for="id_name">Alıcı Adı Soyadı</label>
+                        {% render_field giftForm.name class="form-control" placeholder="Ad Soyad" %}
+
+                        {% for error in giftForm.name.errors %}
+                        <p class="error-list">{{error}}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="form-group">
+                        <label for="id_phone">Telefon Numarası</label>
+                        {% render_field giftForm.phone class="form-control" placeholder="+90-555-444-3322" step="3" %}
+                        {% for error in giftForm.phone.errors %}
+                        <p class="error-list">{{error}}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 pr-1">
+                            <div class="form-group">
+                                <label>İl</label>
+                                {% getProvinceList as provinces %}
+                                <select name="province" class="form-control" id="id_province">
+                                    {% for province in provinces %}
+                                    {% if giftForm.province.value == province %}
+                                    <option id="{{forloop.counter}}" value="{{province}}" selected>{{province}}
+                                    </option>
+                                    {% elif not giftForm.province.value and forloop.counter == 34 %}
+                                    <option id="{{forloop.counter}}" value="{{province}}" selected>{{province}}
+                                    </option>
+                                    {% else %}
+                                    <option id="{{forloop.counter}}" value="{{province}}">{{province}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pl-1">
+                            <div class="form-group">
+                                <label>İlçe</label>
+                                <select name="district" title="{{addressForm.district.value}}" class="form-control"
+                                    id="id_district">
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Adres</label>
+                        {% render_field giftForm.first_line class="form-control" placeholder="Açık Adres" %}
+                        {% for error in giftForm.first_line.errors %}
+                        <p class="error-list">{{error}}</p>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <h1 class="card-category numbers text-center">Ödeme Bilgileri</h1>
+
+
+                    <div class="form-group">
+                        <label for="cardNumber">Kart Numarası</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-credit-card"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="card_number" max_length="12" required
+                                id="id_card_number"
+                                value="{% if paymentForm.card_number.value %}{{paymentForm.card_number.value}}{% endif %}">
+                        </div>
+                        <p class="error-list">{{formError|dict_values:'card_number'}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Kart Üzerindeki İsim</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="full_name" maxlength="50" id="id_full_name"
+                                required=""
+                                value="{% if paymentForm.full_name.value %}{{paymentForm.full_name.value}}{% endif %}">
+                        </div>
+                        <p class="error-list">{{formError|dict_values:'full_name'}}</p>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label><span class="hidden-xs">Son Kullanma Tarihi</span> </label>
+                                <div class="input-group">
+                                    <select name="last_usage_month" id="id_last_usage_month" class="form-control">
+                                        {% for m in paymentForm.last_usage_month %}
+                                        {{m}}
+                                        {% endfor %}
+                                    </select>
+                                    <select name="last_usage_year" id="id_last_usage_year" class="form-control">
+                                        {% for y in paymentForm.last_usage_year %}
+                                        {{y}}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <p class="error-list">{{formError|dict_values:'last_usage_month'}}</p>
+
+                            </div>
+                        </div>
+                        <div class=" col-sm-4">
+                            <div class="form-group">
+                                <label title="">
+                                    CVV
+                                    <i data-toggle="tooltip"
+                                        data-original-title="Kartınızın arkasındaki 3 haneli numara."
+                                        data-placement="left" class="fa fa-question-circle"></i>
+                                </label>
+                                <input type="text" class="form-control" maxlength="3" name="cvv" id="id_cvv" required=""
+                                    value="{% if paymentForm.cvv.value %}{{paymentForm.cvv.value}}{% endif %}">
+                                <p class="error-list">{{formError|dict_values:'cvv'}}</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <input type="checkbox" id="mesafelisatis" required>
+                    <label for="mesafelisatis"><a href="#" data-toggle="modal"
+                            data-target="#mesafelisatissozlesme">Mesafeli
+                            satış sözleşmesi</a>'ni kabul ediyorum.</label>
+
+
+                    <button id="pay_button" name="pay" class="subscribe btn btn-primary btn-block"
+                        onclick="set_hiddens()" type="submit">{{pricing.get_discount_price|floatformat:"2"}}₺
+                        öde
+                    </button>
+                </form>
+            </div>
+        </article>
+    </div>
+    <div class="modal fade" id="mesafelisatissozlesme" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Mesafeli Satış Sözleşmesi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% include 'infos/mesafeli.html' %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block script %}
+
+<script src="{% static 'js/maskphone.js' %}"></script>
+<script>
+    var visible = {
+        "id_spec": $("#id_spec"),
+        "id_bag": $("#id_bag"),
+        "id_case": $("#id_case"),
+        "id_catn": $("#id_catn")
+    }
+
+    var hiddens = {
+        "id_spec": $("#id_spec_note"),
+        "id_bag": $("#id_want_bag"),
+        "id_case": $("#id_spec_case"),
+        "id_catn": $("#id_catname")
+    }
+
+    var price = parseFloat("{{pricing.get_discount_price}}".replace(/,/g, '.'));
+    var pay_button = $("#pay_button");
+
+    $('#id_spec_check').click(function () {
+        var text = $('#id_spec');
+
+        if ($(this).prop("checked")) {
+            text.css("display", "block");
+            price += 2;
+        } else {
+            text.css("display", "none");
+            text.val(null);
+            price -= 2;
+        }
+        pay_button.text(price.toString() + "0₺ Öde");
+    });
+
+    $("#id_bag").click(function () {
+        if ($(this).prop("checked")) {
+            price += 10;
+        } else {
+            price -= 10;
+        }
+        pay_button.text(price + "0₺ Öde");
+    });
+
+    function set_hiddens() {
+        hiddens.id_spec.val(visible.id_spec.val());
+        hiddens.id_bag.val(visible.id_bag.prop("checked"));
+        hiddens.id_case.val(visible.id_case.val());
+        hiddens.id_catn.val(visible.id_catn.val());
+    }
+
+
+    function get_districts() {
+        console.log($("#id_district").attr("title"));
+        var url = "{% url 'ajax_load_districts' %}";
+        var provinceId = $("#id_province").val();
+        $.ajax({
+            url: url,
+            data: {
+                'province': provinceId,
+                'selected': $("#id_district").attr("title")
+            },
+            success: function (data) {
+                $("#id_district").html(data);
+            }
+        });
+    }
+    $(document).ready(function () {
+        get_districts();
+
+        for (var key in hiddens) {
+            if (hiddens[key].val()) {
+                if (key == "id_bag" && hiddens[key].val() == "true") {
+                    visible[key].click();
+                } else {
+                    visible[key].val(hiddens[key].val());
+                }
+            }
+        }
+        if (hiddens.id_spec.val()) {
+            $("#id_spec_check").click();
+        }
+    });
+    $("#id_province").change(function () {
+        get_districts();
+    });
+</script>
+{% endblock script %}

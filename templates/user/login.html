@@ -1,0 +1,22 @@
+{% extends 'includes/loglayout.html' %} {% block body %}
+
+
+<h2>Giriş Yap</h2>
+<hr class="little mt-0">
+<form method="post" class="form-signin">
+    {% csrf_token %}
+    {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{request.GET.next}}">
+    {% endif %}
+    <input type="email" name="email" class="form-control" placeholder="E-Posta" required="" id="id_email">
+    <input type="password" name="password" class="form-control" placeholder="Parola" required="" id="id_password">
+    <button class="btn btn-lg btn-outline-success btn-block btn-signin" type="submit">Giriş Yap</button>
+
+</form>
+<a href="/password_reset">Şifremi unuttum</a>
+<a href="/register?next={{request.GET.next}}">Üye değil misiniz?</a>
+<a href="/">Anasayfa</a> {% endblock body %}
+
+{% block script %}
+
+{% endblock script %}

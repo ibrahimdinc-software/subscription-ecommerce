@@ -1,0 +1,677 @@
+{% extends "includes/dashboard/layout.html" %}
+{% load static %}
+{% load tag %}
+{% load widget_tweaks %}
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/dashboard/saved-card.css' %}">
+<link rel="stylesheet" href="{% static 'css/wizard.css' %}">
+<link rel="stylesheet" href="{% static 'css/product-select.css' %}">
+<style>
+    .strikethrough {
+        position: relative;
+    }
+
+    .strikethrough:before {
+        position: absolute;
+        content: "";
+        left: 0;
+        top: 50%;
+        right: 0;
+        border-top: 2px solid;
+        border-color: inherit;
+        -webkit-transform: rotate(-10deg);
+        -moz-transform: rotate(-10deg);
+        -ms-transform: rotate(-10deg);
+        -o-transform: rotate(-10deg);
+        transform: rotate(-10deg);
+    }
+</style>
+{% endblock header %} {% block body %}
+<a href="#" id=top></a>
+<div class="row justify-content-center">
+    <div class="col-12 wizard-container px-0">
+
+        <div class="card wizard-card" data-color="orange" id="wizardProfile">
+            <form id="wizard-form" action="" method="POST">
+                {% csrf_token %}
+
+                <div class="wizard-header text-center">
+                    <h3 class="wizard-title">Siparişini Oluştur</h3>
+                    <p class="category">Verdiğiniz bilgiler sayfadan ayrıldığınız zaman kaybolur lütfen formu sonuna
+                        kadar doldurun.</p>
+                </div>
+
+                <div class="wizard-navigation">
+                    <div class="progress progress-with-circle">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1"
+                            aria-valuemax="5" style="width: 21%;"></div>
+                    </div>
+                    <ul>
+
+                        <li>
+                            <a href="#package" data-toggle="tab">
+                                <div class="icon-circle">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                Paketler
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#address" data-toggle="tab">
+                                <div class="icon-circle">
+                                    <i class="fas fa-map-marked-alt"></i>
+                                </div>
+                                Adres Bilgisi
+                            </a>
+                        </li>
+
+                        {% if not cats %}
+                        <li>
+                            <a href="#mycat" data-toggle="tab">
+                                <div class="icon-circle">
+                                    <i class="imeow-cat"></i>
+                                </div>
+                                Kediniz Hakkında
+                            </a>
+                        </li>
+                        {% endif %}
+
+
+                        <li>
+                            <a href="#pay" data-toggle="tab">
+                                <div class="icon-circle">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                Ödeme
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content px-0">
+                    <div class="tab-pane" id="package">
+
+                        <h5 class="info-text"> Size en uygun paketi seçiniz. </h5>
+                        <select name="pricing" id="id_pricing" style="opacity: 0; position: absolute; width: 0;"
+                            required>
+                            <option value="">--------------</option>
+                            {% for p in pricings %}
+
+                            {% if p.1.count != 1 %}
+                            {% for pp in p.1 %}
+                            <option value="{{pp.referenceCode}}">{{pp.name}}</option>
+                            {% endfor %}
+                            {% else %}
+                            <option value="{{p.0.selected_plan}}">{{p.0.name}}</option>
+                            {% endif %}
+
+                            {% endfor %}
+                        </select>
+
+                        <div class="row justify-content-center pricing mx-0">
+                            <div id="messageBox"></div>
+                            {% render_field wf.products style="opacity: 0; position: absolute; width: 0;" %}
+
+                            {% for pricing in pricings %}
+
+                            <div class=" col-12 {% if pricing.0.referenceCode != 'ozel' %} col-sm-6 {% endif %} mb-4"
+                                style="display: inline-grid;">
+                                <div class="card mb-1 mb-lg-0" name="pricing"
+                                    selected="{% if pricing.0.selected_plan %}{{pricing.0.selected_plan}}{% else %}{{pricing.0.code}}{% endif %}"
+                                    id="{{pricing.0.code}}" style="border: 3px solid #fd694f;">
+                                    <i class="imeow-checked check_box"></i>
+                                    <div class="card-body d-flex flex-column">
+                                        <h4 class="text-uppercase m-0 text-center">
+                                            {{pricing.0.name}}
+                                        </h4>
+                                        <div class="text-center">
+                                            <img src="{{pricing.0.picture.url}}"
+                                                class="img-fluid img-thumbnail w-50 border-0">
+                                        </div>
+
+                                        {% if pricing.0.get_discount_price == 0 %}
+
+                                        <h5 class="m-0 text-center" id="price-text">
+                                            4 ürün ve üzeri ücretsiz kargo.
+                                        </h5>
+                                        <h5 class="m-0 text-center" id="cargo-text">
+                                            +Kargo:
+                                            <span class="">15,00₺
+                                            </span>
+                                        </h5>
+                                        {% else %}
+                                        <h5 class="m-0 text-muted text-light  text-center ">
+                                            <span
+                                                class="strikethrough">{{pricing.0.get_full_price|floatformat:"2"}}₺</span>
+                                        </h5>
+
+                                        <h5 class="m-0 text-center" id="price-text">
+                                            {{pricing.0.get_discount_price |floatformat:"2"}}₺
+
+                                        </h5>
+                                        {% endif %}
+
+
+                                        <hr>
+                                        <ul class="fa-ul">
+                                            {% for feat in pricing.0.features.all %}
+                                            <li><span class="fa-li"><i class="fas fa-check"></i></span>{{feat.name}}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+
+                                        {% if pricing.0.code == "ozel" %}
+                                        <div id="psbs" class="row justify-content-center">
+
+                                        </div>
+                                        {% endif %}
+
+
+                                        {% if pricing.1.count != 1 %}
+                                        <div class="form-group mt-auto mb-0">
+
+                                            <label for="">Sıklık Seçin:</label>
+                                            <select class="form-control mb-2" name="plan" pricing="{{pricing.0.code}}"
+                                                id="id_plan">
+
+                                                {% if pricing.1.count == 0 %}
+                                                <option value="haftabir">Haftada bir</option>
+                                                <option value="haftaiki">İki haftada bir</option>
+                                                <option value="aybir">Ayda bir</option>
+                                                {% else %}
+                                                {% for pp in pricing.1 %}
+                                                <option value="{{pp.referenceCode}}">{{pp.name}}</option>
+                                                {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        {% endif %}
+                                        <div name="select_button" onclick="button_click('{{pricing.0.code}}')"
+                                            class="btn btn-block btn-primary text-uppercase mt-auto">Bu Paketi Seç
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="address">
+
+                        <h5 class="info-text"> Üyelik ve adres bilgilerinizi giriniz.</h5>
+                        <div class="container">
+
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+
+                                    {% if not request.user.is_authenticated %}
+                                    <div class="row">
+                                        <div class="col-md-6 pr-1">
+                                            <div class="form-group">
+                                                <label for="id_first_name">Ad</label>
+                                                <input type="text" name="first_name" value="" maxlength="50" required
+                                                    id="id_first_name" class="form-control" placeholder="Adınız">
+                                                <label id="errorfirst_name"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 pl-1">
+                                            <div class="form-group">
+                                                <label for="id_last_name">Soyad</label>
+                                                <input type="text" name="last_name" value="" maxlength="50" required
+                                                    id="id_last_name" class="form-control" placeholder="Soyadınız">
+                                                <label id="errorlast_name"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="id_email">E-Posta Adresi</label>
+                                                <input type="email" name="email" value="" maxlength="100" required
+                                                    id="id_email" class="form-control" placeholder="E-Posta">
+                                                <label id="erroremail"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="">
+                                                <label for="id_password">Parola</label>
+                                                <input type="password" name="password" class="form-control"
+                                                    placeholder="Parola" minlength="6" required id="id_password">
+                                                <label id="errorpassword"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="">
+                                                <label for="id_phone">Telefon Numarası</label>
+                                                <input type="text" name="phone" value="{{wf.phone.value}}"
+                                                    placeholder="+90-555-444-3322" maxlength="128"
+                                                    class="textinput textInput form-control" id="id_phone" required>
+                                                <label id="errorphone"></label>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 pr-1">
+                                            <div class="form-group">
+                                                <label>İl</label> {% getProvinceList as provinces %}
+                                                <select name="province" class="textinput textInput form-control"
+                                                    id="id_province">
+                                                    {% for province in provinces %}
+                                                    {% if wf.province.value == province %}
+                                                    <option id="{{forloop.counter}}" value="{{province}}" selected>
+                                                        {{province}}
+                                                    </option>
+                                                    {% elif not wf.province.value and forloop.counter == 34 %}
+                                                    <option id="{{forloop.counter}}" value="{{province}}" selected>
+                                                        {{province}}
+                                                    </option>
+                                                    {% else %}
+                                                    <option id="{{forloop.counter}}" value="{{province}}">
+                                                        {{province}}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 pl-1">
+                                            <div class="form-group">
+                                                <label>İlçe</label>
+                                                <select name="district" title="{{wf.district.value}}"
+                                                    class="textinput textInput form-control" id="id_district">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Adres</label>
+                                                <input type="text" name="first_line" id="id_first_line"
+                                                    class="form-control" placeholder="Açık Adres" required
+                                                    value="{% if wf.first_line.value %} {{wf.first_line.value}} {% endif %}">
+                                                <label id="errorfirst_line"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    {% if not request.user.is_authenticated %}
+                                    <input type="checkbox" required name="gizuyecheck" id="gizuyecheck">
+                                    <label for="gizuyecheck">
+                                        <a href="#" data-toggle="modal" data-target="#uyelik">Üyelik
+                                            sözleşmesi</a>
+                                        ve <a href="#" data-toggle="modal" data-target="#gizlilik">gizlilik
+                                            politakısını</a>
+                                        kabul
+                                        ediyorum.
+                                    </label>
+                                    <label id="errorgizuyecheck"></label> {% endif %}
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if not cats %}
+                    <div class="tab-pane" id="mycat">
+                        <h5 class="info-text"> Kedinize özel ürünler gönderebilmemiz için gerekli.</h5>
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Kedinin Adı</label>
+                                                <input type="text" name="cat_name" maxlength="30" placeholder="Adı"
+                                                    class="form-control" required id="id_name">
+                                                <label id="errorcat_name"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 pr-1">
+                                            <div class="form-group">
+                                                <label>Cinsiyet</label>
+                                                <select name="gender" class="textinput textInput form-control" required
+                                                    id="id_gender">
+                                                    <option value="" selected="">---------</option>
+
+                                                    <option value="0">Dişi</option>
+
+                                                    <option value="1">Erkek</option>
+
+                                                </select>
+                                                <label id="errorgender"></label>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 pl-1">
+                                            <div class="form-group">
+                                                <label>Durumu</label>
+                                                <select name="status" class="textinput textInput form-control"
+                                                    required="" id="id_status">
+                                                    <option value="" selected="">---------</option>
+
+                                                    <option value="0">Yavru</option>
+
+                                                    <option value="1">Yetişkin</option>
+
+                                                    <option value="2">Kısırlaştırılmış</option>
+
+                                                </select>
+                                                <label id="errorstatus"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Özel Durum</label>
+                                                <textarea name="spec_case" cols="40" rows="10" maxlength="140"
+                                                    placeholder="Kediniz ile ilgili bildirmek istediğiniz özel durumları bu alana yazabilirsiniz."
+                                                    class="form-control textarea" id="id_spec_case"></textarea>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+                    <div class="tab-pane" id="pay">
+
+                        <h5 class="info-text"> Ödeme bilgilerinizi girerek bu heyecana siz de dahil olun. </h5>
+
+                        <div class="row justify-content-center mx-0">
+
+                            <div class="col-sm-6 col-12">
+                                <div class="card-body p-4">
+                                    <p class="card-category numbers text-center">Ödeme Bilgileri</p>
+
+                                    <div class="form-group">
+                                        <label for="id_card_number">Kart Numarası</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-credit-card"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="card_number" max_length="12"
+                                                id="id_card_number" required>
+                                        </div>
+                                        <label id="errorcard_number"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Kart Üzerindeki İsim</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" name="full_name" maxlength="50"
+                                                id="id_full_name" required value="">
+
+                                        </div>
+                                        <label id="errorfull_name"></label>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="form-group">
+                                                <label><span class="hidden-xs">Son Kullanma Tarihi</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <select name="last_usage_month" id="id_last_usage_month"
+                                                        class="form-control" required>
+                                                        {% for m in wf.last_usage_month %}
+                                                        {{m}}
+                                                        {% endfor %}
+                                                    </select>
+                                                    <select name="last_usage_year" id="id_last_usage_year"
+                                                        class="form-control" required>
+                                                        {% for y in wf.last_usage_year %}
+                                                        {{y}}
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=" col-sm-4">
+                                            <div class="form-group">
+                                                <label title="">
+                                                    CVV
+                                                    <i data-toggle="tooltip"
+                                                        data-original-title="Kartınızın arkasındaki 3 haneli numara."
+                                                        data-placement="left" class="fa fa-question-circle"></i>
+                                                </label>
+                                                <input type="number" class="form-control" maxlength="4" name="cvv"
+                                                    id="id_cvv" required value="">
+
+                                            </div>
+                                            <label id="errorcvv"></label>
+                                        </div>
+                                    </div>
+
+
+
+                                    <label for="mesafelisatis"> <input type="checkbox" name="mesafelisatis"
+                                            id="mesafelisatis" required><a href="#" data-toggle="modal"
+                                            data-target="#mesafelisatissozlesme">
+                                            Mesafeli satış sözleşmesi</a>'ni ve iyzico güvencesi ile kartımın
+                                        kayıt edilmesini kabul ediyorum.
+                                    </label>
+                                    <label id="errormesafelisatis"></label>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="wizard-footer position-sticky bg-white" style="bottom: 0;">
+                    <div class="float-left">
+                        <a href="#" class='btn btn-previous btn-info toper' name='previous'><i
+                                class="fas fa-arrow-left"></i>
+                            GERİ </a>
+                    </div>
+                    <div class="float-right">
+                        <a href="#top" class='btn btn-next btn-primary toper' id="next" name='next'> Devam <i
+                                class="fas fa-arrow-right"></i>
+                        </a>
+
+
+                        <button id="pay_button" name='finish'
+                            class="disabled subscribe btn btn-finish btn-primary btn-block" type="submit">
+                            paket
+                            seçimi yapınız.
+                        </button>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- wizard container -->
+</div>
+
+
+{% endblock body %} {% block outbody %}
+
+<div class="modal fade" id="mesafelisatissozlesme" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mesafeli Satış Sözleşmesi
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% include 'infos/mesafeli.html' %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "includes/dashboard/productSelectList.html" %}
+
+{% endblock outbody %} {% block script %}
+<script src="{% static 'js/jquery.validate.min.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.wizard.js' %}"></script>
+<script src="{% static 'js/paper-bootstrap-wizard.v1.js' %}"></script>
+<script src="{% static 'js/product-select.v1.js' %}"></script>
+<script>
+    $("#wizard-form").validate({
+        messages: {
+            pricing: {
+                required: "Öncelikle istediğiniz paketi seçiniz."
+            },
+            first_name: {
+                required: "Lütfen adınızı girin."
+            },
+            last_name: {
+                required: "Lütfen soyadınızı girin."
+            },
+            phone: {
+                required: "Lütfen telefon numaranızı girin."
+            },
+            email: {
+                required: "Lütfen e-posta adresinizi girin."
+            },
+            password: {
+                required: "Lütfen parola belirleyiniz.",
+                minlength: "Lütfen en az 6 karakter uzunluğunda bir parola belirleyin."
+            },
+            first_line: {
+                required: "Lütfen adres bilgisi giriniz."
+            },
+            gizuyecheck: {
+                required: "Bu alan gerekli."
+            },
+            cat_name: {
+                required: "Bu alan gerekli."
+            },
+            gender: {
+                required: "Bu alan gerekli."
+            },
+            card_number: {
+                required: "Bu alan gerekli."
+            },
+            cvv: {
+                required: "Bu alan gerekli."
+            },
+            full_name: {
+                required: "Bu alan gerekli."
+            },
+            mesafelisatis: {
+                required: "Bu alan gerekli."
+            }
+
+        },
+        errorPlacement: function ($error, $element) {
+            var name = $element.attr("name");
+            console.log(name);
+            if (name == 'pricing') {
+                $("#messageBox").append($error);
+            } else {
+                $("#error" + name).append($error);
+            }
+
+        }
+    });
+</script>
+
+<script>
+    function get_districts() { // ilçe getirme komutları start
+        var url = "{% url 'ajax_load_districts' %}";
+        var provinceId = $("#id_province").val();
+        $.ajax({
+            url: url,
+            data: {
+                'province': provinceId,
+                'selected': $("#id_district").attr("title")
+            },
+            success: function (data) {
+                $("#id_district").html(data);
+            }
+        });
+    }
+    $("#id_province").change(function () {
+        get_districts();
+    });
+    // ilçe getirme komutları end
+
+
+    pricings = []; // plan listesi
+    selected_pricing = null; // seçili plan
+
+    $(document).ready(function () {
+        get_districts();
+
+        ps = document.getElementsByName("pricing");
+        for (let i = 0; i < ps.length; i++) {
+            pricings.push(ps[i])
+        }
+
+    });
+
+    $('[name="plan"]').change(function () {
+        var id = this.getAttribute('pricing');
+        document.getElementById(id).setAttribute("selected", $(this).val());
+        if (id == selected_pricing) {
+            console.log(id)
+            console.log($(this).val())
+            document.getElementById("id_pricing").value = $(this).val();
+        }
+    });
+
+
+    $("#pay_button").click(function () {
+        var valid = $('.wizard-card form').valid();
+        if (valid) {
+            $(this).html("<i class='fas fa-spinner fa-2x fa-pulse fa-fw'></i>");
+            document.getElementById("pay_button").style.pointerEvents = "none";
+            document.getElementById("pay_button").style.opacity = 0.5;
+        }
+
+    });
+
+    function button_click(id) {
+        for (let i = 0; i < pricings.length; i++) {
+            if (pricings[i].id == id) {
+                pricings[i].classList.add("selected");
+                document.getElementById("pay_button").classList.remove("disabled");
+                document.getElementById("pay_button").textContent = "Abone Ol";
+                document.getElementById("id_pricing").value = document.getElementById(id).getAttribute("selected");
+                selected_pricing = id;
+                console.log(id)
+                console.log(document.getElementById(id).getAttribute("selected"))
+            } else {
+                pricings[i].classList.remove("selected");
+            }
+        }
+    }
+</script>
+<script src="{% static 'js/maskphone.js' %}"></script>
+{% endblock script %}

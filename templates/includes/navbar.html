@@ -1,0 +1,35 @@
+{% load static %}
+<nav class="navbar navbar-light sticky-top" style="background-color: white;">
+    <a href="/" class="navbar-brand">
+        <img id="navbar-image" class="sidebar-image" style="visibility: {{vis}};" src="{% static 'images/logo.png' %}">
+    </a>
+    {% if request.user.is_authenticated %}
+    <ul class="navbar-nav ml-auto" style="display: -webkit-inline-box;">
+        <li class="nav-item mr-3">
+            <a class="nav-link" href="/logout">Çıkış Yap</a>
+        </li>
+
+        {% if user.is_superuser %}
+        <li class="nav-item">
+            <a href="/bosswindow" class="btn btn-outline-success">Admin Paneli</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a href="/dashboard" class="btn btn-outline-success">Kontrol Paneli</a>
+        </li>
+        {% endif %}
+
+
+    </ul>
+    {% else %}
+    <ul class="navbar-nav ml-auto" style="display: -webkit-inline-box;">
+        <li class="nav-item mr-3">
+            <a class="nav-link" href="/login">Giriş Yap</a>
+        </li>
+        <li class="nav-item">
+            <a href="/register" class="btn btn-outline-success">Hemen Üye Ol</a>
+        </li>
+    </ul>
+    {% endif %}
+
+</nav>

@@ -1,0 +1,96 @@
+{% extends 'includes/dashboard/layout.html' %} {% block body %}
+{% load pinax_messages_tags %}
+<div class="row justify-content-center">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats" url="{% url 'pinax_messages:message_create'%}"
+            style="transition: .4s; cursor: pointer;">
+            <div class=" card-body ">
+                <div class=" numbers text-center ">
+                    <p class=" card-category ">Destek</p>
+                    <p class=" card-title ">Talep Oluştur</p>
+                </div>
+            </div>
+            <div class=" card-footer ">
+                <hr>
+                <div class=" stats ">Buradan sormak istediklerinizi kolayca sorabilirsiniz.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=" col-md-12 ">
+        <div class=" card ">
+            <div class=" card-header ">
+                <h4 class=" card-title ">Destek Taleplerim</h4>
+            </div>
+            <hr>
+            <div class=" card-body ">
+                {% if threads %}
+                <div>
+                    <!-- class =" table-responsive "-->
+                    <table class=" table ">
+                        <thead class=" text-primary ">
+                            <th>
+                                Konu
+                            </th>
+                            <th>
+                                Mesaj
+                            </th>
+                            <th class="text-right">
+                                Durum
+                            </th>
+                        </thead>
+                        <tbody>
+                            {% for t in threads %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'pinax_messages:thread_detail' t.pk %}">{{t.subject}}</a>
+
+                                </td>
+                                <td>
+                                    {{t.latest_message.content}}
+                                </td>
+                                <td class="text-right">
+
+                                    {% if t|unread:user %}
+                                    Beklemede
+                                    {% else %}
+                                    Cevaplandı
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p> Henüz talebiniz bulunmuyor.</p>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock body %} {% block script %}
+<script>
+    $(document).ready(function () {
+        var e = $(document).find(".card-stats");
+        e.click(function () {
+            window.location.href = $(this).attr("url");
+        });
+        for (let i = 0; i < e.length; i++) {
+            e[i].style.transition = ".4s";
+            e[i].style.cursor = "pointer";
+            e.hover(function () {
+                    $(this).css("box-shadow", "0 0 20px 1px #494949");
+                },
+                function () {
+                    $(this).css("box-shadow", "0 6px 10px -4px rgba(0, 0, 0, 0.15)");
+                });
+        }
+    });
+</script>
+{% endblock script %}

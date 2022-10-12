@@ -1,0 +1,274 @@
+{% extends 'includes/dashboard/layout.html' %} {% block body %} {% load tag %}
+<div class="row justify-content-center">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats" url="/dashboard/notifications">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i style="color:#60c2ce" class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Bildirim</p>
+                            <p class="card-title">{{unread|dict_values:'Bildirim'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fas fa-sync-alt"></i> Şimdi
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats" url="/dashboard/profile">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i style="color: #fd694f ;" class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Profilim</p>
+                            <p class="card-title">{{unread|dict_values:'Profil'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fas fa-sync-alt"></i> Son Güncelleme Tarihi
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats" url="/dashboard/subscription">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i style="color: #c7bf83 ;" class="far fa-credit-card"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Abonelik</p>
+                            <p class="card-title">{{unread|dict_values:'Abonelik'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fas fa-sync-alt"></i> Son Güncelleme Tarihi
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats" url="/dashboard/mycat">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i style="color: #EA2300 ;" class="imeow-cat"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Kedim</p>
+                            <p class="card-title">{{unread|dict_values:'Kedi'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fas fa-sync-alt"></i> Son Güncelleme Tarihi
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats" url="/dashboard/gift">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i style="color: #F96D15 ;" class="imeow-gift"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Hediye</p>
+                            <p class="card-title">{{unread|dict_values:'Hediye'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fas fa-sync-alt"></i> Son Güncelleme Tarihi
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats" url="/dashboard/voting">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-5 col-md-4">
+                        <div class="icon-big text-center icon-warning">
+                            <i style="color: #A9E5BB ;" class="fas fa-chart-pie"></i>
+                        </div>
+                    </div>
+                    <div class="col-7 col-md-8">
+                        <div class="numbers">
+                            <p class="card-category">Oylama</p>
+                            <p class="card-title">{{unread|dict_values:'Oylama'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                    <i class="fas fa-sync-alt"></i> Son Güncelleme Tarihi
+                </div>
+            </div>
+        </div>
+    </div>
+        -->
+</div>
+<!--
+<div class="row">
+    <div class="col-md-4">
+        <div class="card ">
+            <div class="card-header ">
+                <h5 class="card-title">Oylama</h5>
+                <p class="card-category">Oylama Sonuçları</p>
+            </div>
+            <div class="card-body ">
+                <canvas id="chartEmail"></canvas>
+            </div>
+            <div class="card-footer ">
+                <div class="legend">
+                    <i class="fa fa-circle" style="color: #e3e3e3;"></i> 1. Seçenek
+                    <i class="fa fa-circle" style="color: #4acccd;"></i> 2. Seçenek
+                    <i class="fa fa-circle" style="color: #fcc468;"></i> 3. Seçenek
+                    <i class="fa fa-circle" style="color: #ef8157;"></i> 4. Seçenek
+                </div>
+                <hr>
+                <div class="stats">
+                    <i class="fas fa-sync-alt"></i>Güncelleme Tarihi
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+-->
+{% endblock body %} {% block script %}
+<script>
+    // $(".card").
+
+    $(document).ready(function () {
+
+        var e = $(document).find(".card-stats");
+        e.click(function () {
+            window.location.href = $(this).attr("url");
+        });
+        for (let i = 0; i < e.length; i++) {
+            e[i].style.transition = ".4s";
+            e[i].style.cursor = "pointer";
+            e.hover(function () {
+                    $(this).css("box-shadow", "0 0 20px 1px " + $(this).find("i")[0].style.color);
+                },
+                function () {
+                    $(this).css("box-shadow", "0 6px 10px -4px rgba(0, 0, 0, 0.15)");
+                });
+        }
+
+        ctx = document.getElementById('chartEmail').getContext("2d");
+
+        myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [1, 2, 3, 4],
+                datasets: [{
+                    label: "Sonuçlar",
+                    pointRadius: 0,
+                    pointHoverRadius: 0,
+                    backgroundColor: [
+                        '#e3e3e3',
+                        '#4acccd',
+                        '#fcc468',
+                        '#ef8157'
+                    ],
+                    borderWidth: 1,
+                    data: [50, 20, 14, 16]
+                }]
+            },
+
+            options: {
+
+                legend: {
+                    display: false
+                },
+
+                pieceLabel: {
+                    render: 'percentage',
+                    fontColor: ['white'],
+                    precision: 4
+                },
+
+                tooltips: {
+                    enabled: true
+                },
+
+                scales: {
+                    yAxes: [{
+
+                        ticks: {
+                            display: false
+                        },
+                        gridLines: {
+                            drawBorder: false,
+                            zeroLineColor: "transparent",
+                            color: 'rgba(255,255,255,0.05)'
+                        }
+
+                    }],
+
+                    xAxes: [{
+                        barPercentage: 1.6,
+                        gridLines: {
+                            drawBorder: false,
+                            color: 'rgba(255,255,255,0.1)',
+                            zeroLineColor: "transparent"
+                        },
+                        ticks: {
+                            display: false,
+                        }
+                    }]
+                },
+            }
+        });
+
+    });
+</script>
+{% endblock script %}
